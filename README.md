@@ -7,6 +7,8 @@ publish-to-them is an sbt plugin that enables publishing to one or more reposito
 
 Add the plugin globally in ~/.sbt/0.13/plugins/publish-to-them.sbt:
 ```scala
+resolvers += "thirstycrow" at "http://thirstycrow.github.io/repo"
+
 addSbtPlugin("me.thirstycrow.sbt" % "publish-to-them" % "0.1")
 ```
 
