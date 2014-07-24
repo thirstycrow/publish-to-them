@@ -9,7 +9,7 @@ Add the plugin globally in ~/.sbt/0.13/plugins/publish-to-them.sbt:
 ```scala
 resolvers += "thirstycrow" at "http://thirstycrow.github.io/repo"
 
-addSbtPlugin("me.thirstycrow.sbt" % "publish-to-them" % "0.1")
+addSbtPlugin("me.thirstycrow.sbt" % "publish-to-them" % "0.2")
 ```
 
 Add most often used repositories in PublishToThem.publishableRepos:
