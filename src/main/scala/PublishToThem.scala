@@ -25,6 +25,8 @@ object PublishToThem extends Plugin {
 
   override lazy val settings = Seq(
 
+    otherResolvers := (otherResolvers.value ++ publishableRepos.value.values).distinct,
+
     publishToThem := {
       val names: Seq[String] = parser.parsed
       val reposToPublish = names.flatMap(publishableRepos.value.get)
