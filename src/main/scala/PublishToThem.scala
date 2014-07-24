@@ -29,14 +29,23 @@ object PublishToThem extends Plugin {
       val names: Seq[String] = parser.parsed
       val reposToPublish = names.flatMap(publishableRepos.value.get)
       val log = streams.value.log
-      ivyModule.value.withModule(log) {
-        case (ivy, module, _) =>
-          val artifacts = IvyActions.mapArtifacts(module, Some(sv => sv), packagedArtifacts.value)
-          reposToPublish.distinct.foreach { repo =>
-            val ivyResolver = ConvertResolver(repo, ivy.getSettings, log)
-            ivyResolver.asInstanceOf[org.apache.ivy.plugins.resolver.AbstractResolver].setSettings(ivy.getSettings)
-            IvyActions.publish(module, artifacts, ivyResolver, true)
-          }
+      reposToPublish.distinct.foreach { repo =>
+        val config = if (repo == Resolver.publishMavenLocal) {
+          publishM2Configuration.value
+        }
+        else if (repo == Resolver.defaultLocal) {
+          publishLocalConfiguration.value
+        }
+        else {
+          Classpaths.publishConfig(
+            packagedArtifacts.in(publish).value,
+            if (publishMavenStyle.value) None else Some(deliver.value),
+            resolverName = repo.name,
+            checksums = checksums.in(publish).value,
+            logging = ivyLoggingLevel.value, overwrite = isSnapshot.value
+          )
+        }
+        IvyActions.publish(ivyModule.value, config, log)
       }
     }
 
